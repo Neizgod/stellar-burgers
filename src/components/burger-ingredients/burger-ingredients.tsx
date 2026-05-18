@@ -4,11 +4,11 @@ import { useInView } from 'react-intersection-observer';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useSelector } from '../../services/store';
-import { constructorBurgerStateSelector } from '../../services/slices/constructorBurgerSlice';
+import { ingredientsStateSelector } from '../../services/slices/ingredientsSlice';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
-  const { data } = useSelector(constructorBurgerStateSelector);
+  const { data } = useSelector(ingredientsStateSelector);
   const buns = data.filter((item) => item.type === 'bun');
   const mains = data.filter((item) => item.type === 'main');
   const sauces = data.filter((item) => item.type === 'sauce');

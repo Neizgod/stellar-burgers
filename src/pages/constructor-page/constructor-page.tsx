@@ -7,14 +7,14 @@ import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
 import {
-  constructorBurgerStateSelector,
+  ingredientsStateSelector,
   getIngredients
-} from '../../services/slices/constructorBurgerSlice';
+} from '../../services/slices/ingredientsSlice';
 
 export const ConstructorPage: FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector(
-    constructorBurgerStateSelector
+  const { isLoading, data, error } = useSelector(
+    ingredientsStateSelector
   );
 
   useEffect(() => {
@@ -22,7 +22,20 @@ export const ConstructorPage: FC = () => {
   }, []);
 
   if (isLoading) return <Preloader />;
-  if (error) return <div>{error}</div>;
+  if (error)
+    return (
+      <div className={`${styles.error} text text_type_main-medium pt-4`}>
+        {error}
+      </div>
+    );
+
+  if (data.length === 0) {
+    return (
+      <div className={`${styles.title} text text_type_main-medium pt-4`}>
+        Нет игредиентов
+      </div>
+    );
+  }
 
   return (
     <main className={styles.containerMain}>

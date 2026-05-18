@@ -2,13 +2,13 @@ import { getIngredientsApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 
-type TConstructorBurgerSlice = {
+type TIngredientsSlice = {
   isLoading: boolean;
   data: TIngredient[];
   error: string | null;
 };
 
-const initialState: TConstructorBurgerSlice = {
+const initialState: TIngredientsSlice = {
   isLoading: false,
   data: [],
   error: null
@@ -19,12 +19,12 @@ export const getIngredients = createAsyncThunk(
   async () => getIngredientsApi()
 );
 
-export const constructorBurgerSlice = createSlice({
-  name: 'constructorBurger',
+export const ingredientsSlice = createSlice({
+  name: 'Ingredients',
   initialState,
   reducers: {},
   selectors: {
-    constructorBurgerStateSelector: (state) => state
+    ingredientsStateSelector: (state) => state
   },
   extraReducers: (builder) => {
     builder
@@ -43,5 +43,5 @@ export const constructorBurgerSlice = createSlice({
   }
 });
 
-export const { constructorBurgerStateSelector } =
-  constructorBurgerSlice.selectors;
+export const { ingredientsStateSelector } =
+  ingredientsSlice.selectors;
