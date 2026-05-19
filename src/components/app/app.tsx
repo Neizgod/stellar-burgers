@@ -2,23 +2,43 @@ import { ConstructorPage, Feed } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader } from '@components';
+import { AppHeader, Modal, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from '../../services/store';
+import { ingredientsStateSelector } from '../../services/slices/ingredientsSlice';
 
 const App = () => {
   /** TODO: взять переменные из стора */
+
   const isIngredientsLoading = false;
-  const ingredients = [];
+  const ingredients = useSelector(ingredientsStateSelector);
   const error = null;
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
       </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title={'Детали ингредиента'} onClose={() => navigate(-1)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
 
     // <div className={styles.app}>

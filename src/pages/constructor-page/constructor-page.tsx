@@ -13,12 +13,12 @@ import {
 
 export const ConstructorPage: FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, data, error } = useSelector(
-    ingredientsStateSelector
-  );
+  const { isLoading, data, error } = useSelector(ingredientsStateSelector);
 
   useEffect(() => {
-    dispatch(getIngredients());
+    if (data.length === 0 && !isLoading) {
+      dispatch(getIngredients());
+    }
   }, []);
 
   if (isLoading) return <Preloader />;
