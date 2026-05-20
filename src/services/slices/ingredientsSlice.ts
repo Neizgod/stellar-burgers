@@ -20,7 +20,7 @@ export const getIngredients = createAsyncThunk(
 );
 
 export const ingredientsSlice = createSlice({
-  name: 'Ingredients',
+  name: 'ingredients',
   initialState,
   reducers: {},
   selectors: {
