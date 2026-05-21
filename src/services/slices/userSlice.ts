@@ -100,12 +100,12 @@ export const userSlice = createSlice({
         state.loginUserError = 'Возникла ошибка при регистрации пользователя';
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.email = action.payload.user.email;
-        state.name = action.payload.user.name;
+        // state.email = action.payload.user.email;
+        // state.name = action.payload.user.name;
         state.loginUserRequest = false;
-        state.isAuthenticated = true;
-        setCookie('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
+        // state.isAuthenticated = true;
+        // setCookie('accessToken', action.payload.accessToken);
+        // localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
 
       .addCase(updateUser.pending, (state) => {

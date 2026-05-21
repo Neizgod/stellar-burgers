@@ -1,33 +1,40 @@
-import { ConstructorPage, Feed, Login, NotFound404, Register } from '@pages';
+import {
+  ConstructorPage,
+  Feed,
+  Login,
+  NotFound404,
+  Profile,
+  Register
+} from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader, Modal, IngredientDetails } from '@components';
+import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
 import { Preloader } from '@ui';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { ingredientsStateSelector } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
 import { authUser, userSliceSelector } from '../../services/slices/userSlice';
+import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 
 const App = () => {
   /** TODO: взять переменные из стора */
 
-  const isIngredientsLoading = false;
-  const ingredients = useSelector(ingredientsStateSelector);
-  const error = null;
+  // const isIngredientsLoading = false;
+  // const ingredients = useSelector(ingredientsStateSelector);
+  // const error = null;
 
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.background;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const {isAuthenticated, isAuthChecked} = useSelector(userSliceSelector)
+  const { isAuthenticated, isAuthChecked } = useSelector(userSliceSelector);
 
   useEffect(() => {
-    if (!isAuthChecked || !isAuthenticated )
-    dispatch(authUser())
-  }, [])
+    if (!isAuthChecked) dispatch(authUser());
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -36,8 +43,38 @@ const App = () => {
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       {backgroundLocation && (
@@ -48,6 +85,16 @@ const App = () => {
               <Modal title={'Детали ингредиента'} onClose={() => navigate(-1)}>
                 <IngredientDetails />
               </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <Modal title={''} onClose={() => navigate(-1)}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>
