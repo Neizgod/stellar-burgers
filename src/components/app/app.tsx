@@ -13,7 +13,7 @@ import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
 import { Preloader } from '@ui';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
-import { ingredientsStateSelector } from '../../services/slices/ingredientsSlice';
+import { getIngredients, ingredientsStateSelector } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
 import { authUser, userSliceSelector } from '../../services/slices/userSlice';
 import { ProtectedRoute } from '../protectedRoute/protectedRoute';
@@ -24,17 +24,25 @@ const App = () => {
   // const isIngredientsLoading = false;
   // const ingredients = useSelector(ingredientsStateSelector);
   // const error = null;
-
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.background;
   const dispatch = useDispatch();
 
-  const { isAuthenticated, isAuthChecked } = useSelector(userSliceSelector);
+  const { isAuthenticated, isAuthChecked, loginUserRequest } =
+    useSelector(userSliceSelector);
+    const { isLoading, data } = useSelector(ingredientsStateSelector);
 
   useEffect(() => {
-    if (!isAuthChecked) dispatch(authUser());
+    if (isAuthChecked || isAuthenticated || loginUserRequest) return;
+    dispatch(authUser());
   }, []);
+
+    useEffect(() => {
+      if (data.length === 0 && !isLoading) {
+        dispatch(getIngredients());
+      }
+    }, []);
 
   return (
     <div className={styles.app}>
@@ -75,6 +83,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       {backgroundLocation && (
@@ -95,6 +104,17 @@ const App = () => {
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal
+                title={`#${location.pathname.split('/').pop()!}`}
+                onClose={() => navigate(-1)}
+              >
+                <OrderInfo />
+              </Modal>
             }
           />
         </Routes>

@@ -53,15 +53,18 @@ export const BurgerConstructor: FC = () => {
     // if (!constructorItems.bun || orderRequest) return;
     if (!constructorItems.bun) return;
     if (!isAuthenticated) navigate('/login');
+    const data = [
+      constructorItems.bun._id,
+      ...constructorItems.ingredients.map((item) => item._id),
+      constructorItems.bun._id
+    ];
 
-    const data = constructorItems.ingredients.map((item) => item._id);
-    data.push(constructorItems.bun._id);
     dispatch(orderBurger(data));
   };
 
   const closeOrderModal = () => {
     dispatch(clearNewOrder());
-    dispatch(clearIngredients());
+    if (!orderInfo.orderRequest) dispatch(clearIngredients());
   };
 
   const price = useMemo(
