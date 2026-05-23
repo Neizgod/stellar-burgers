@@ -41,7 +41,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (data.length === 0 && !isLoading) {
+    if (data.length === 0) {
       dispatch(getIngredients());
     }
   }, []);

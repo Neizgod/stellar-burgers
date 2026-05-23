@@ -11,7 +11,7 @@
   },
   "rules": {
     "prettier/prettier": [
-      "off", // Изменить на warn
+      "warn",
       {
         "usePrettierrc": true
       }

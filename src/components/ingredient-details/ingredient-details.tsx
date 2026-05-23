@@ -26,5 +26,10 @@ export const IngredientDetails: FC = () => {
     return <Preloader />;
   }
 
-  return <IngredientDetailsUI ingredientData={ingredientData} isInModal={isInModal}/>;
+  return (
+    <IngredientDetailsUI
+      ingredientData={ingredientData}
+      isInModal={isInModal}
+    />
+  );
 };

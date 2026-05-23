@@ -110,5 +110,6 @@ export const ordersSlice = createSlice({
   }
 });
 
-export const { clearNewOrder, clearUserOrders, clearCurrentOrderData } = ordersSlice.actions;
+export const { clearNewOrder, clearUserOrders, clearCurrentOrderData } =
+  ordersSlice.actions;
 export const { ordersSliceSelector } = ordersSlice.selectors;

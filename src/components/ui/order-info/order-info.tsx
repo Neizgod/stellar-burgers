@@ -16,7 +16,11 @@ export const OrderInfoUI: FC<OrderInfoUIProps> = memo(({ orderInfo }) => {
 
   return (
     <div className={styles.wrap}>
-      {location.state?.background ? '' : <h2 className={styles.number}>{`#${number}`}</h2>}
+      {location.state?.background ? (
+        ''
+      ) : (
+        <h2 className={styles.number}>{`#${number}`}</h2>
+      )}
       <h3 className={`text text_type_main-medium  pb-3 pt-10 ${styles.header}`}>
         {orderInfo.name}
       </h3>
