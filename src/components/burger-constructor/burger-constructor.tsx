@@ -52,7 +52,10 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     // if (!constructorItems.bun || orderRequest) return;
     if (!constructorItems.bun) return;
-    if (!isAuthenticated) navigate('/login');
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     const data = [
       constructorItems.bun._id,
       ...constructorItems.ingredients.map((item) => item._id),

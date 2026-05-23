@@ -12,14 +12,14 @@ import {
 } from '../../services/slices/ingredientsSlice';
 
 export const ConstructorPage: FC = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { isLoading, data, error } = useSelector(ingredientsStateSelector);
 
-  useEffect(() => {
-    if (data.length === 0 && !isLoading) {
-      dispatch(getIngredients());
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (data.length === 0 && !isLoading) {
+  //     dispatch(getIngredients());
+  //   }
+  // }, []);
 
   if (isLoading) return <Preloader />;
   if (error)

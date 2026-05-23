@@ -14,10 +14,12 @@ type TOrderState = {
   newOrder: null | TNewOrder;
   error: null | string;
   currentOrderData: TOrder | null;
+  userOrders: TOrder[] | null;
 } & TOrdersData;
 
 const initialState: TOrderState = {
   orders: [],
+  userOrders: null,
   total: 0,
   totalToday: 0,
   isLoading: false,
@@ -51,6 +53,12 @@ export const ordersSlice = createSlice({
   reducers: {
     clearNewOrder: (state) => {
       state.newOrder = null;
+    },
+    clearUserOrders: (state) => {
+      state.userOrders = null;
+    },
+    clearCurrentOrderData: (state) => {
+      state.currentOrderData = null;
     }
   },
   selectors: {
@@ -90,7 +98,7 @@ export const ordersSlice = createSlice({
         state.isLoadingOrders = false;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
-        state.orders = action.payload;
+        state.userOrders = action.payload;
         state.isLoadingOrders = false;
       })
 
@@ -102,5 +110,5 @@ export const ordersSlice = createSlice({
   }
 });
 
-export const { clearNewOrder } = ordersSlice.actions;
+export const { clearNewOrder, clearUserOrders, clearCurrentOrderData } = ordersSlice.actions;
 export const { ordersSliceSelector } = ordersSlice.selectors;
