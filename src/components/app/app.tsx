@@ -124,13 +124,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal
-                title={'Детали ингредиента'}
-                onClose={() => {
-                  dispatch(clearCurrentOrderData());
-                  navigate(-1);
-                }}
-              >
+              <Modal title={'Детали ингредиента'} onClose={() => navigate(-1)}>
                 <IngredientDetails />
               </Modal>
             }
@@ -156,7 +150,10 @@ const App = () => {
             element={
               <Modal
                 title={`#${location.pathname.split('/').pop()!}`}
-                onClose={() => navigate(-1)}
+                onClose={() => {
+                  dispatch(clearCurrentOrderData());
+                  navigate(-1);
+                }}
               >
                 <OrderInfo />
               </Modal>
