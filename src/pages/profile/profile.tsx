@@ -5,9 +5,9 @@ import { updateUser, userSliceSelector } from '../../services/slices/userSlice';
 import { Preloader } from '@ui';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
   const dispatch = useDispatch();
-  const { name, email, loginUserError, loginUserRequest } = useSelector(userSliceSelector);
+  const { name, email, loginUserError, loginUserRequest } =
+    useSelector(userSliceSelector);
 
   const user = {
     name: name,
@@ -71,7 +71,7 @@ export const Profile: FC = () => {
     }));
   };
 
-  if (loginUserRequest) return <Preloader />
+  if (loginUserRequest) return <Preloader />;
 
   return (
     <ProfileUI
@@ -83,6 +83,4 @@ export const Profile: FC = () => {
       updateUserError={error}
     />
   );
-
-  return null;
 };

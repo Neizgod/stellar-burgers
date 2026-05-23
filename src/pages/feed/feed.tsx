@@ -5,7 +5,6 @@ import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   getFeeds,
-  getOrders,
   ordersSliceSelector
 } from '../../services/slices/ordersSlice';
 import {
@@ -14,7 +13,6 @@ import {
 } from '../../services/slices/ingredientsSlice';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
   const dispatch = useDispatch();
   const { orders, isLoadingOrders } = useSelector(ordersSliceSelector);
   const { isLoading, data } = useSelector(ingredientsStateSelector);
@@ -22,13 +20,12 @@ export const Feed: FC = () => {
   const ingredients = data;
 
   useEffect(() => {
-    if (orders.length === 0) dispatch(getFeeds());
+    dispatch(getFeeds());
   }, []);
 
   useEffect(() => {
     if (ingredients.length === 0) dispatch(getIngredients());
   }, []);
-  // const orders: TOrder[] = [];
 
   if (isLoadingOrders || isLoadingIngredients) {
     return <Preloader />;

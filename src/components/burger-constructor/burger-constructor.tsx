@@ -16,7 +16,6 @@ import {
 import { TNewOrder } from '@api';
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const constructorItems = useSelector(BurgerConstructorSelector);
   const orderData = useSelector(ordersSliceSelector);
   const { isAuthenticated } = useSelector(userSliceSelector);
@@ -30,17 +29,6 @@ export const BurgerConstructor: FC = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // const constructorItems = {
-  //   bun: {
-  //     price: 0
-  //   },
-  //   ingredients: []
-  // };
-
-  // let orderRequest = false;
-
-  // let orderModalData = null;
 
   useEffect(() => {
     setOrderInfo({

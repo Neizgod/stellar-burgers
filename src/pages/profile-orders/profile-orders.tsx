@@ -9,7 +9,6 @@ import {
 import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
-  /** TODO: взять переменную из стора */
   const dispatch = useDispatch();
   const orders = useSelector(ordersSliceSelector).userOrders;
   useEffect(() => {
@@ -17,8 +16,6 @@ export const ProfileOrders: FC = () => {
   }, []);
 
   if (!orders) return <Preloader />;
-
-  // const orders: TOrder[] = [];
 
   return <ProfileOrdersUI orders={orders} />;
 };

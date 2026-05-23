@@ -10,7 +10,6 @@ import { useParams, useLocation } from 'react-router-dom';
 
 export const IngredientDetails: FC = () => {
   const dispatch = useDispatch();
-  /** TODO: взять переменную из стора */
   const { id } = useParams();
   const { data, isLoading } = useSelector(ingredientsStateSelector);
   useEffect(() => {

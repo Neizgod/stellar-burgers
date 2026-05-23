@@ -11,7 +11,6 @@ import {
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
   const dispatch = useDispatch();
   const { number } = useParams();
 
@@ -21,19 +20,8 @@ export const OrderInfo: FC = () => {
 
   const orderData: TOrder = useSelector(ordersSliceSelector).currentOrderData!;
 
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
-
   const ingredients: TIngredient[] = useSelector(ingredientsStateSelector).data;
 
-  /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
 
