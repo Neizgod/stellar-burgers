@@ -1,49 +1,27 @@
 import { test, expect } from '@playwright/test';
 
-import {
-  ingredientsResponse,
-  userResponse,
-  orderResponse
-} from './tests/mocks/mockData';
-
 test.beforeEach(async ({ page }) => {
-  await page.route('**/api/ingredients', async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify(ingredientsResponse)
-    });
+  await page.routeFromHAR('./tests/hars/ingredients.har', {
+    url: '**/api/ingredients',
+    update: false
+  });
+  await page.routeFromHAR('./tests/hars/user.har', {
+    url: '**/api/auth/user',
+    update: false
   });
 
-  await page.route('**/api/auth/user', async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify(userResponse)
-    });
+  await page.routeFromHAR('./tests/hars/order.har', {
+    url: '**/api/orders',
+    update: false
   });
 
-  await page.route('**/api/orders', async (route) => {
-    if (route.request().method() === 'POST') {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(orderResponse)
-      });
-      return;
-    }
-
-    await route.continue();
+  await page.addInitScript(() => {
+    localStorage.setItem('refreshToken', 'test-refresh-token');
+    localStorage.setItem(
+      'accessToken',
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test'
+    );
   });
-
-  await page.context().addCookies([
-    {
-      name: 'accessToken',
-      value: 'test-token',
-      domain: 'localhost',
-      path: '/'
-    }
-  ]);
 
   await page.goto('/');
 });
@@ -52,6 +30,13 @@ test('открыть модальное окно с ингредиентом', a
   await page.getByText('Краторная булка N-200i').click();
 
   await expect(page.getByText('Детали ингредиента')).toBeVisible();
+
+  const modal = page.getByTestId('modal');
+  await expect(modal.getByText('Краторная булка N-200i')).toBeVisible();
+  await expect(modal.getByText('420')).toBeVisible(); // calories
+  await expect(modal.getByText('80')).toBeVisible(); // proteins
+  await expect(modal.getByText('24')).toBeVisible(); // fat
+  await expect(modal.getByText('53')).toBeVisible(); // carbohydrates
 });
 
 test('закрыть модальное окно через кнопку', async ({ page }) => {
@@ -75,30 +60,44 @@ test('закрыть модальное окно через оверлей', asy
 });
 
 test('добавить ингредиент в конструктор', async ({ page }) => {
-  
-  await page.getByTestId('add-bun-id').getByRole('button', { name: 'Добавить' }).click();
-  await page.getByTestId('add-main-id').getByRole('button', { name: 'Добавить' }).click();
+  await page
+    .getByTestId('add-bun-id')
+    .getByRole('button', { name: 'Добавить' })
+    .click();
+  await page
+    .getByTestId('add-main-id')
+    .getByRole('button', { name: 'Добавить' })
+    .click();
 
-  
-  await expect(page.getByText('Краторная булка N-200i (верх)')).toBeVisible();
+  const constructor = page.getByTestId('burger-constructor');
 
-  
-  await expect(page.getByText('Биокотлета из марсианской Магнолии').nth(1)).toBeVisible();
+  await expect(
+    constructor.getByText('Краторная булка N-200i (верх)')
+  ).toBeVisible();
+  await expect(
+    constructor.getByText('Биокотлета из марсианской Магнолии')
+  ).toBeVisible();
 });
 
 test('сделать заказ', async ({ page }) => {
-  await page.getByText('Добавить').first().click();
-  await page.getByText('Добавить').nth(1).click();
+  await page
+    .getByTestId('add-bun-id')
+    .getByRole('button', { name: 'Добавить' })
+    .click();
+  await page
+    .getByTestId('add-main-id')
+    .getByRole('button', { name: 'Добавить' })
+    .click();
 
   await page.getByTestId('order-button').click();
 
-  await expect(page.getByText('12345')).toBeVisible();
+  const modal = page.getByTestId('modal');
 
-  await expect(page.getByText('идентификатор заказа')).toBeVisible();
+  await expect(modal.getByText('12345')).toBeVisible();
+  await expect(modal.getByText('идентификатор заказа')).toBeVisible();
 
   await page.getByTestId('modal-close').click();
 
   await expect(page.getByTestId('constructor-bun-empty')).toBeVisible();
-
   await expect(page.getByTestId('constructor-main-empty')).toBeVisible();
 });
